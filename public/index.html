@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panther Graphic AI Chatbot</title>
+  <link rel="icon" href="logo.png" type="image/png">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #121212;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    header {
+      background: #1f1f1f;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header img {
+      height: 40px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: normal;
+    }
+
+    .chat-container {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .message {
+      margin: 10px 0;
+    }
+
+    .user {
+      color: #81c784;
+      font-weight: bold;
+    }
+
+    .bot {
+      color: #64b5f6;
+      font-style: italic;
+      animation: typing 1s steps(22) 1;
+      white-space: pre-wrap;
+    }
+
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+
+    .input-container {
+      background: #1f1f1f;
+      padding: 15px 20px;
+      display: flex;
+      gap: 10px;
+    }
+
+    input {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: #2196f3;
+      border: none;
+      padding: 10px 15px;
+      color: white;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    footer {
+      font-size: 12px;
+      color: #777;
+      text-align: center;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <img src="logo.png" alt="Panther Logo" />
+      <h1>Panther Graphic AI</h1>
+    </div>
+  </header>
+
+  <div class="chat-container" id="chat">
+    <!-- Messages will appear here -->
+  </div>
+
+  <div class="input-container">
+    <input type="text" id="userInput" placeholder="Type your message..." />
+    <button onclick="sendMessage()">Send</button>
+  </div>
+
+  <footer>
+    © Panther Graphic AI | +250785885499
+  </footer>
+
+  <script>
+  async function sendMessage() {
+    const input = document.getElementById("userInput");
+    const chat = document.getElementById("chat");
+    const userMessage = input.value.trim();
+    if (!userMessage) return;
+
+    chat.innerHTML += `<div class="message user">You: ${userMessage}</div>`;
+    input.value = "";
+
+    const response = await fetch("/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: userMessage })
+    });
+
+    const data = await response.json();
+    const botMessage = data.reply;
+
+    chat.innerHTML += `<div class="message bot">Panther: ${botMessage}</div>`;
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  // 👇 Add this event listener for Enter key
+  document.getElementById("userInput").addEventListener("keypress", function (e) {
+    if (e.key === "Enter") {
+      sendMessage();
+    }
+  });
+    async function sendMessage() {
+      const input = document.getElementById("userInput");
+      const chat = document.getElementById("chat");
+      const userMessage = input.value.trim();
+      if (!userMessage) return;
+
+      chat.innerHTML += `<div class="message user">You: ${userMessage}</div>`;
+      input.value = "";
+
+      const response = await fetch("/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: userMessage })
+      });
+
+      const data = await response.json();
+      const botMessage = data.reply;
+
+      chat.innerHTML += `<div class="message bot">Panther: ${botMessage}</div>`;
+      chat.scrollTop = chat.scrollHeight;
+    }
+  </script>
+</body>
+</html>
